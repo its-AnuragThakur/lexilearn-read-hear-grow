@@ -460,6 +460,36 @@ export type Database = {
         }
         Relationships: []
       }
+      student_assessments: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          learning_profile: Json | null
+          responses: Json
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          learning_profile?: Json | null
+          responses: Json
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          learning_profile?: Json | null
+          responses?: Json
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       teacher_notes: {
         Row: {
           created_at: string

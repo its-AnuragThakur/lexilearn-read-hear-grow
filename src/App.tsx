@@ -22,6 +22,7 @@ import StudentLesson from "./pages/student/Lesson";
 import StudentPractice from "./pages/student/Practice";
 import StudentProgress from "./pages/student/Progress";
 import StudentSettings from "./pages/student/Settings";
+import StudentAssessment from "./pages/student/Assessment";
 
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherLessons from "./pages/teacher/Lessons";
@@ -57,6 +58,7 @@ const App = () => (
 
               {/* Student Routes */}
               <Route path="/student" element={<ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>} />
+              <Route path="/student/assessment" element={<ProtectedRoute role="student"><StudentAssessment /></ProtectedRoute>} />
               <Route path="/student/lessons" element={<ProtectedRoute role="student"><StudentLessons /></ProtectedRoute>} />
               <Route path="/student/lessons/:id" element={<ProtectedRoute role="student"><StudentLesson /></ProtectedRoute>} />
               <Route path="/student/practice" element={<ProtectedRoute role="student"><StudentPractice /></ProtectedRoute>} />
