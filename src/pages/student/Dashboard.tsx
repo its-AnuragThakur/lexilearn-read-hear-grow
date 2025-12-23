@@ -1,10 +1,26 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useHasCompletedAssessment } from '@/hooks/useAssessment';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Play, BarChart3, Settings, Sparkles } from 'lucide-react';
+import { BookOpen, Play, BarChart3, Settings, Sparkles, Loader2 } from 'lucide-react';
 
 export default function StudentDashboard() {
   const { profile, signOut } = useAuth();
+  const { hasCompleted, isLoading } = useHasCompletedAssessment();
+
+  // Show loading while checking assessment status
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // Redirect to assessment if not completed
+  if (!hasCompleted) {
+    return <Navigate to="/student/assessment" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
