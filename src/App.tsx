@@ -15,19 +15,23 @@ import AccessibilityPage from "./pages/Accessibility";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
-// Protected pages
+// Student pages - redesigned for dyslexia
 import StudentDashboard from "./pages/student/Dashboard";
-import StudentLessons from "./pages/student/Lessons";
-import StudentLesson from "./pages/student/Lesson";
-import StudentPractice from "./pages/student/Practice";
+import StudentAssessment from "./pages/student/Assessment";
+import StudentSubjects from "./pages/student/Subjects";
+import StudentUnits from "./pages/student/Units";
+import StudentTopics from "./pages/student/Topics";
+import StudentTopicExplanation from "./pages/student/TopicExplanation";
+import StudentBookmarks from "./pages/student/Bookmarks";
 import StudentProgress from "./pages/student/Progress";
 import StudentSettings from "./pages/student/Settings";
-import StudentAssessment from "./pages/student/Assessment";
 
+// Teacher pages
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import TeacherLessons from "./pages/teacher/Lessons";
 import TeacherReports from "./pages/teacher/Reports";
 
+// Parent pages
 import ParentDashboard from "./pages/parent/Dashboard";
 import ParentProgress from "./pages/parent/Progress";
 import ParentFeedback from "./pages/parent/Feedback";
@@ -56,12 +60,14 @@ const App = () => (
               <Route path="/accessibility" element={<AccessibilityPage />} />
               <Route path="/contact" element={<Contact />} />
 
-              {/* Student Routes */}
+              {/* Student Routes - Dyslexia-optimized flow */}
               <Route path="/student" element={<ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>} />
               <Route path="/student/assessment" element={<ProtectedRoute role="student"><StudentAssessment /></ProtectedRoute>} />
-              <Route path="/student/lessons" element={<ProtectedRoute role="student"><StudentLessons /></ProtectedRoute>} />
-              <Route path="/student/lessons/:id" element={<ProtectedRoute role="student"><StudentLesson /></ProtectedRoute>} />
-              <Route path="/student/practice" element={<ProtectedRoute role="student"><StudentPractice /></ProtectedRoute>} />
+              <Route path="/student/subjects" element={<ProtectedRoute role="student"><StudentSubjects /></ProtectedRoute>} />
+              <Route path="/student/subjects/:subjectId/units" element={<ProtectedRoute role="student"><StudentUnits /></ProtectedRoute>} />
+              <Route path="/student/subjects/:subjectId/units/:unitId/topics" element={<ProtectedRoute role="student"><StudentTopics /></ProtectedRoute>} />
+              <Route path="/student/topics/:topicId" element={<ProtectedRoute role="student"><StudentTopicExplanation /></ProtectedRoute>} />
+              <Route path="/student/bookmarks" element={<ProtectedRoute role="student"><StudentBookmarks /></ProtectedRoute>} />
               <Route path="/student/progress" element={<ProtectedRoute role="student"><StudentProgress /></ProtectedRoute>} />
               <Route path="/student/settings" element={<ProtectedRoute role="student"><StudentSettings /></ProtectedRoute>} />
 

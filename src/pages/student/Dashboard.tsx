@@ -1,18 +1,31 @@
+/**
+ * Student Dashboard - Simplified, focus-driven design
+ * 
+ * Design choices:
+ * - Simple welcome message as primary element
+ * - ONE action: "Continue Learning"
+ * - Single progress indicator
+ * - No cards, widgets, or information overload
+ * - Large touch targets, clear hierarchy
+ */
+
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useHasCompletedAssessment } from '@/hooks/useAssessment';
+import { StudentLayout } from '@/components/layout/StudentLayout';
+import { LexiCard, LexiProgress } from '@/components/ui/lexi-card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Play, BarChart3, Settings, Sparkles, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 export default function StudentDashboard() {
-  const { profile, signOut } = useAuth();
+  const { profile } = useAuth();
   const { hasCompleted, isLoading } = useHasCompletedAssessment();
 
-  // Show loading while checking assessment status
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" aria-label="Loading" />
       </div>
     );
   }
@@ -22,55 +35,85 @@ export default function StudentDashboard() {
     return <Navigate to="/student/assessment" replace />;
   }
 
+  // Get first name for friendlier greeting
+  const firstName = profile?.full_name?.split(' ')[0] || 'there';
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border/50 bg-card">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link to="/student" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-              <BookOpen className="h-5 w-5 text-primary-foreground" />
+    <StudentLayout pageTitle="Home">
+      <div className="mx-auto max-w-2xl space-y-10">
+        
+        {/* Welcome message - simple and warm */}
+        <section className="space-y-2">
+          <h2 className="text-3xl font-semibold text-foreground">
+            Welcome back, {firstName}
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Ready to continue learning?
+          </p>
+        </section>
+
+        {/* Primary action - Continue Learning */}
+        <section>
+          <Link to="/student/subjects" className="block">
+            <LexiCard className="group">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <h3 className="text-xl font-medium text-foreground">
+                    Continue Learning
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Pick up where you left off
+                  </p>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform group-hover:translate-x-1">
+                  <ArrowRight className="h-6 w-6" />
+                </div>
+              </div>
+            </LexiCard>
+          </Link>
+        </section>
+
+        {/* Single progress indicator */}
+        <section className="space-y-4">
+          <h3 className="text-lg font-medium text-foreground">
+            Your Progress
+          </h3>
+          <LexiCard>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Overall completion</span>
+                <span className="text-lg font-medium text-primary">25%</span>
+              </div>
+              <LexiProgress value={25} />
+              <p className="text-sm text-muted-foreground">
+                Keep going! Every step counts.
+              </p>
             </div>
-            <span className="text-xl font-semibold">LexiLearn</span>
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link to="/student/lessons" className="text-muted-foreground hover:text-foreground">Lessons</Link>
-            <Link to="/student/practice" className="text-muted-foreground hover:text-foreground">Practice</Link>
-            <Link to="/student/progress" className="text-muted-foreground hover:text-foreground">Progress</Link>
-            <Link to="/student/settings" className="text-muted-foreground hover:text-foreground">Settings</Link>
-            <Button variant="outline" size="sm" onClick={signOut}>Sign Out</Button>
-          </nav>
-        </div>
-      </header>
+          </LexiCard>
+        </section>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="lexi-heading text-3xl font-bold">Welcome back, {profile?.full_name || 'Learner'}! 👋</h1>
-          <p className="mt-2 text-muted-foreground">Ready to continue your learning adventure?</p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Link to="/student/lessons" className="lexi-card p-6 transition-all hover:shadow-lg">
-            <Play className="mb-4 h-10 w-10 text-primary" />
-            <h2 className="text-xl font-semibold">Continue Learning</h2>
-            <p className="mt-2 text-sm text-muted-foreground">Pick up where you left off</p>
-          </Link>
-          <Link to="/student/practice" className="lexi-card p-6 transition-all hover:shadow-lg">
-            <Sparkles className="mb-4 h-10 w-10 text-lexi-amber" />
-            <h2 className="text-xl font-semibold">Practice</h2>
-            <p className="mt-2 text-sm text-muted-foreground">Games, quizzes & flashcards</p>
-          </Link>
-          <Link to="/student/progress" className="lexi-card p-6 transition-all hover:shadow-lg">
-            <BarChart3 className="mb-4 h-10 w-10 text-lexi-sage" />
-            <h2 className="text-xl font-semibold">My Progress</h2>
-            <p className="mt-2 text-sm text-muted-foreground">See how far you've come</p>
-          </Link>
-          <Link to="/student/settings" className="lexi-card p-6 transition-all hover:shadow-lg">
-            <Settings className="mb-4 h-10 w-10 text-muted-foreground" />
-            <h2 className="text-xl font-semibold">Settings</h2>
-            <p className="mt-2 text-sm text-muted-foreground">Customize your experience</p>
-          </Link>
-        </div>
-      </main>
-    </div>
+        {/* Quick access - minimal */}
+        <section className="pt-4">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-14 flex-1 text-base"
+            >
+              <Link to="/student/bookmarks">View Saved Topics</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-14 flex-1 text-base"
+            >
+              <Link to="/student/settings">Adjust Settings</Link>
+            </Button>
+          </div>
+        </section>
+      </div>
+    </StudentLayout>
   );
 }
