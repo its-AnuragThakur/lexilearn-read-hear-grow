@@ -98,26 +98,48 @@ export default function ParentDashboard() {
         return;
       }
 
-      // Create link
-      const { error: linkError } = await supabase
+      // Check if already linked
+      const { data: existingLink } = await supabase
         .from('parent_student_links')
+        .select('id')
+        .eq('parent_id', user.id)
+        .eq('student_id', studentProfile.id)
+        .maybeSingle();
+
+      if (existingLink) {
+        toast.error('You are already linked to this student');
+        return;
+      }
+
+      // Check if request already exists
+      const { data: existingRequest } = await supabase
+        .from('parent_link_requests')
+        .select('id, status')
+        .eq('parent_id', user.id)
+        .eq('student_id', studentProfile.id)
+        .maybeSingle();
+
+      if (existingRequest) {
+        if (existingRequest.status === 'pending') {
+          toast.error('A link request is already pending for this student');
+        } else if (existingRequest.status === 'rejected') {
+          toast.error('This student has declined your previous request');
+        }
+        return;
+      }
+
+      // Create link request (not direct link)
+      const { error: requestError } = await supabase
+        .from('parent_link_requests')
         .insert({
           parent_id: user.id,
           student_id: studentProfile.id,
         });
 
-      if (linkError) {
-        if (linkError.code === '23505') {
-          toast.error('You are already linked to this student');
-        } else {
-          throw linkError;
-        }
-        return;
-      }
+      if (requestError) throw requestError;
 
-      toast.success('Successfully linked to student!');
+      toast.success('Link request sent! The student will need to accept it.');
       setLinkEmail('');
-      refetch();
     } catch (error) {
       console.error('Error linking student:', error);
       toast.error('Failed to link student. Please try again.');

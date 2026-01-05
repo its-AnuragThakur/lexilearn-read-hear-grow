@@ -14,6 +14,7 @@ import { StudentLayout } from '@/components/layout/StudentLayout';
 import { LexiCard, LexiProgress } from '@/components/ui/lexi-card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { LinkRequestNotifications } from '@/components/student/LinkRequestNotifications';
 
 export default function StudentDashboard() {
   // Frontend-only: use static name
@@ -22,6 +23,9 @@ export default function StudentDashboard() {
   return (
     <StudentLayout pageTitle="Home">
       <div className="mx-auto max-w-2xl space-y-10">
+        
+        {/* Parent link request notifications */}
+        <LinkRequestNotifications />
         
         {/* Welcome message - simple and warm */}
         <section className="space-y-2">
