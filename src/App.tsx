@@ -61,8 +61,8 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
 
               {/* Student Routes - Dyslexia-optimized flow */}
-              <Route path="/student" element={<StudentDashboard />} />
-              <Route path="/student/dashboard" element={<StudentDashboard />} />
+              <Route path="/student" element={<ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>} />
+              <Route path="/student/dashboard" element={<ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>} />
               <Route path="/student/assessment" element={<ProtectedRoute role="student"><StudentAssessment /></ProtectedRoute>} />
               <Route path="/student/subjects" element={<ProtectedRoute role="student"><StudentSubjects /></ProtectedRoute>} />
               <Route path="/student/subjects/:subjectId/units" element={<ProtectedRoute role="student"><StudentUnits /></ProtectedRoute>} />
