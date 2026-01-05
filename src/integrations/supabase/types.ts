@@ -586,6 +586,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_role_by_email: {
+        Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] }
+        Returns: string
+      }
       is_linked_parent: {
         Args: { _parent_id: string; _student_id: string }
         Returns: boolean
