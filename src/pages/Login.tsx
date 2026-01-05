@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +13,6 @@ const loginSchema = z.object({
 });
 
 export default function Login() {
-  const { signIn, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -28,7 +26,7 @@ export default function Login() {
     e.preventDefault();
     setErrors({});
 
-    // Validate
+    // Validate form fields
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       const fieldErrors: { email?: string; password?: string } = {};
@@ -42,27 +40,18 @@ export default function Login() {
 
     setIsLoading(true);
 
-    const { error } = await signIn(email, password);
-
-    if (error) {
-      toast({
-        title: 'Login Failed',
-        description: error.message === 'Invalid login credentials' 
-          ? 'Email or password is incorrect. Please try again.'
-          : error.message,
-        variant: 'destructive',
-      });
-      setIsLoading(false);
-      return;
-    }
+    // Simulate login delay for UX
+    await new Promise(resolve => setTimeout(resolve, 800));
 
     toast({
       title: 'Welcome back!',
       description: 'You have successfully logged in.',
     });
 
-    // Navigation will be handled by auth state change
-    navigate('/');
+    setIsLoading(false);
+    
+    // Navigate to student dashboard (frontend-only demo)
+    navigate('/student/dashboard');
   };
 
   return (
@@ -82,9 +71,9 @@ export default function Login() {
       {/* Main Content */}
       <main className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          <div className="lexi-card p-8">
+          <div className="rounded-2xl border border-border/50 bg-card p-8 shadow-sm">
             <div className="mb-8 text-center">
-              <h1 className="lexi-heading mb-2 text-2xl font-bold">Welcome Back</h1>
+              <h1 className="mb-2 text-2xl font-bold text-foreground">Welcome Back</h1>
               <p className="text-muted-foreground">
                 Sign in to continue your learning journey
               </p>
@@ -146,7 +135,7 @@ export default function Login() {
               <Button
                 type="submit"
                 className="h-12 w-full text-base"
-                disabled={isLoading || authLoading}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <>
