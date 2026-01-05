@@ -51,6 +51,7 @@ export default function Login() {
     setIsLoading(false);
     
     // Navigate to student dashboard (frontend-only demo)
+    navigate('/student');
     navigate('/student/dashboard');
   };
 

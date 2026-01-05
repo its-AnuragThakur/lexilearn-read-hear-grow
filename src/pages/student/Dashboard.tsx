@@ -9,34 +9,15 @@
  * - Large touch targets, clear hierarchy
  */
 
-import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useHasCompletedAssessment } from '@/hooks/useAssessment';
+import { Link } from 'react-router-dom';
 import { StudentLayout } from '@/components/layout/StudentLayout';
 import { LexiCard, LexiProgress } from '@/components/ui/lexi-card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function StudentDashboard() {
-  const { profile } = useAuth();
-  const { hasCompleted, isLoading } = useHasCompletedAssessment();
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" aria-label="Loading" />
-      </div>
-    );
-  }
-
-  // Redirect to assessment if not completed
-  if (!hasCompleted) {
-    return <Navigate to="/student/assessment" replace />;
-  }
-
-  // Get first name for friendlier greeting
-  const firstName = profile?.full_name?.split(' ')[0] || 'there';
+  // Frontend-only: use static name
+  const firstName = 'Student';
 
   return (
     <StudentLayout pageTitle="Home">
