@@ -10,8 +10,7 @@
  */
 
 import { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   Home, 
@@ -40,9 +39,14 @@ const navItems = [
 ];
 
 export function StudentLayout({ children, pageTitle }: StudentLayoutProps) {
-  const { signOut, profile } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Frontend-only sign out - just navigate to login
+  const handleSignOut = () => {
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,12 +125,12 @@ export function StudentLayout({ children, pageTitle }: StudentLayoutProps) {
                 <User className="h-5 w-5 text-primary" />
               </div>
               <span className="truncate text-sm font-medium text-foreground">
-                {profile?.full_name || 'Student'}
+                Student
               </span>
             </div>
             <Button
               variant="ghost"
-              onClick={signOut}
+              onClick={handleSignOut}
               className="w-full justify-start gap-4 h-12 text-muted-foreground hover:text-foreground"
             >
               <LogOut className="h-5 w-5" />
