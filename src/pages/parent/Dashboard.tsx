@@ -85,14 +85,15 @@ export default function ParentDashboard() {
         return;
       }
 
-      // Check if student has student role
-      const { data: roles } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', studentProfile.id)
-        .eq('role', 'student');
+      // Check if student has student role using RPC function
+      const { data: isStudent, error: roleError } = await supabase
+        .rpc('has_role', { 
+          _user_id: studentProfile.id, 
+          _role: 'student' 
+        });
 
-      if (!roles || roles.length === 0) {
+      if (roleError) throw roleError;
+      if (!isStudent) {
         toast.error('This user is not registered as a student');
         return;
       }
