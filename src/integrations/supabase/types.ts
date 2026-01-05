@@ -252,6 +252,33 @@ export type Database = {
         }
         Relationships: []
       }
+      parent_link_requests: {
+        Row: {
+          created_at: string
+          id: string
+          parent_id: string
+          responded_at: string | null
+          status: string
+          student_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parent_id: string
+          responded_at?: string | null
+          status?: string
+          student_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parent_id?: string
+          responded_at?: string | null
+          status?: string
+          student_id?: string
+        }
+        Relationships: []
+      }
       parent_student_links: {
         Row: {
           created_at: string
