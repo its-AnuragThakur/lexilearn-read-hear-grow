@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +14,7 @@ const loginSchema = z.object({
 });
 
 export default function Login() {
+  const { signIn, user, roles, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -21,6 +23,14 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && roles.length > 0 && !authLoading) {
+      const primaryRole = roles[0];
+      navigate(`/${primaryRole}`);
+    }
+  }, [user, roles, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +50,21 @@ export default function Login() {
 
     setIsLoading(true);
 
-    // Simulate login delay for UX
-    await new Promise(resolve => setTimeout(resolve, 800));
+    const { error } = await signIn(email, password);
+
+    if (error) {
+      let errorMessage = error.message;
+      if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Invalid email or password. Please try again.';
+      }
+      toast({
+        title: 'Login Failed',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+      return;
+    }
 
     toast({
       title: 'Welcome back!',
@@ -49,10 +72,7 @@ export default function Login() {
     });
 
     setIsLoading(false);
-    
-    // Navigate to student dashboard (frontend-only demo)
-    navigate('/student');
-    navigate('/student/dashboard');
+    // Navigation will happen via useEffect when user/roles are loaded
   };
 
   return (
@@ -136,7 +156,7 @@ export default function Login() {
               <Button
                 type="submit"
                 className="h-12 w-full text-base"
-                disabled={isLoading}
+                disabled={isLoading || authLoading}
               >
                 {isLoading ? (
                   <>
