@@ -32,7 +32,7 @@ export function CreateStudentDialog({ onSuccess }: CreateStudentDialogProps) {
 
     setIsCreating(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-student-account', {
+      const response = await supabase.functions.invoke('create-student-account', {
         body: {
           studentName: studentName.trim(),
           studentEmail: studentEmail.trim(),
@@ -41,8 +41,13 @@ export function CreateStudentDialog({ onSuccess }: CreateStudentDialogProps) {
         },
       });
 
-      if (error) throw error;
-      if (data.error) throw new Error(data.error);
+      // Handle both error object and error in data
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to create student account');
+      }
+      if (response.data?.error) {
+        throw new Error(response.data.error);
+      }
 
       setSuccess(true);
       toast.success('Student account created! Credentials sent to your email.');
