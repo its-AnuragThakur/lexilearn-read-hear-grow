@@ -1,7 +1,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2.47.10";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "npm:resend@4.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+if (!RESEND_API_KEY) {
+  console.error("Missing RESEND_API_KEY secret");
+}
+const resend = new Resend(RESEND_API_KEY ?? "");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -98,7 +102,13 @@ Deno.serve(async (req: Request) => {
       || "https://dlcyhpuelgydiwwkzggx.lovableproject.com";
 
     // Send email
-    await resend.emails.send({
+    if (!RESEND_API_KEY) {
+      throw new Error("Email service is not configured (missing RESEND_API_KEY)");
+    }
+
+    console.log("Sending reset credentials email", { to: parentEmail, studentEmail });
+
+    const emailResult = await resend.emails.send({
       from: "LexiLearn <onboarding@resend.dev>",
       to: [parentEmail],
       subject: "Your Child's New LexiLearn Login Credentials",
@@ -150,6 +160,13 @@ Deno.serve(async (req: Request) => {
         </html>
       `,
     });
+
+    if ((emailResult as any)?.error) {
+      console.error("Resend returned error:", (emailResult as any).error);
+      throw new Error("Failed to send credentials email");
+    }
+
+    console.log("Email sent successfully:", emailResult);
 
     return new Response(
       JSON.stringify({ success: true, message: "Credentials reset and sent via email" }),
