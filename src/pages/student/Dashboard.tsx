@@ -9,19 +9,50 @@
  * - Large touch targets, clear hierarchy
  */
 
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StudentLayout } from '@/components/layout/StudentLayout';
 import { LexiCard, LexiProgress } from '@/components/ui/lexi-card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { LinkRequestNotifications } from '@/components/student/LinkRequestNotifications';
+import { PasswordChangeModal } from '@/components/student/PasswordChangeModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function StudentDashboard() {
-  // Frontend-only: use static name
-  const firstName = 'Student';
+  const { user, profile } = useAuth();
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const firstName = profile?.full_name?.split(' ')[0] || 'Student';
+
+  // Check if password change is required on first login
+  useEffect(() => {
+    const checkPasswordStatus = async () => {
+      if (!user?.id) return;
+
+      const { data } = await supabase
+        .from('parent_created_students')
+        .select('password_changed')
+        .eq('student_id', user.id)
+        .maybeSingle();
+
+      // If record exists and password hasn't been changed, show modal
+      if (data && !data.password_changed) {
+        setShowPasswordChange(true);
+      }
+    };
+
+    checkPasswordStatus();
+  }, [user?.id]);
 
   return (
     <StudentLayout pageTitle="Home">
+      {/* Password change modal for first-time login */}
+      <PasswordChangeModal 
+        open={showPasswordChange} 
+        onComplete={() => setShowPasswordChange(false)} 
+      />
+
       <div className="mx-auto max-w-2xl space-y-10">
         
         {/* Parent link request notifications */}

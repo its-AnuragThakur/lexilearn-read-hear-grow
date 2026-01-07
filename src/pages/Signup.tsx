@@ -17,7 +17,6 @@ const signupSchema = z.object({
 });
 
 const roles: { value: AppRole; label: string; icon: typeof GraduationCap; description: string }[] = [
-  { value: 'student', label: 'Student', icon: GraduationCap, description: 'I want to learn' },
   { value: 'teacher', label: 'Teacher', icon: BookOpen, description: 'I create lessons' },
   { value: 'parent', label: 'Parent', icon: Users, description: 'I support my child' },
 ];
@@ -28,7 +27,7 @@ export default function Signup() {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   
-  const initialRole = (searchParams.get('role') as AppRole) || 'student';
+  const initialRole = (searchParams.get('role') as AppRole) || 'parent';
   
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -108,10 +107,13 @@ export default function Signup() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Role Selection */}
+              {/* Role Selection - Students cannot sign up independently */}
               <div className="space-y-3">
                 <Label className="text-base">I am a...</Label>
-                <div className="grid grid-cols-3 gap-3">
+                <p className="text-sm text-muted-foreground">
+                  Student accounts are created by parents from their dashboard.
+                </p>
+              <div className="grid grid-cols-2 gap-3">
                   {roles.map((role) => (
                     <button
                       key={role.value}
