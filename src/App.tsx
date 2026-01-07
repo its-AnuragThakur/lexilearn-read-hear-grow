@@ -35,6 +35,8 @@ import TeacherReports from "./pages/teacher/Reports";
 import ParentDashboard from "./pages/parent/Dashboard";
 import ParentProgress from "./pages/parent/Progress";
 import ParentFeedback from "./pages/parent/Feedback";
+import SubmissionUpload from "./pages/parent/SubmissionUpload";
+import SubmissionConfirmation from "./pages/parent/SubmissionConfirmation";
 
 // Components
 import { ReadingRuler } from "./components/accessibility/ReadingRuler";
@@ -81,6 +83,8 @@ const App = () => (
               <Route path="/parent" element={<ProtectedRoute role="parent"><ParentDashboard /></ProtectedRoute>} />
               <Route path="/parent/progress" element={<ProtectedRoute role="parent"><ParentProgress /></ProtectedRoute>} />
               <Route path="/parent/feedback" element={<ProtectedRoute role="parent"><ParentFeedback /></ProtectedRoute>} />
+              <Route path="/parent/submission-upload" element={<ProtectedRoute role="parent"><SubmissionUpload /></ProtectedRoute>} />
+              <Route path="/parent/submission-confirmation" element={<ProtectedRoute role="parent"><SubmissionConfirmation /></ProtectedRoute>} />
 
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />

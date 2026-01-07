@@ -95,6 +95,42 @@ export type Database = {
         }
         Relationships: []
       }
+      assignment_submissions: {
+        Row: {
+          assignment_id: string
+          assignment_name: string
+          created_at: string
+          id: string
+          image_url: string
+          parent_id: string
+          student_id: string
+          submitted_at: string
+          video_url: string
+        }
+        Insert: {
+          assignment_id: string
+          assignment_name: string
+          created_at?: string
+          id?: string
+          image_url: string
+          parent_id: string
+          student_id: string
+          submitted_at?: string
+          video_url: string
+        }
+        Update: {
+          assignment_id?: string
+          assignment_name?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          parent_id?: string
+          student_id?: string
+          submitted_at?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       flashcard_decks: {
         Row: {
           created_at: string
