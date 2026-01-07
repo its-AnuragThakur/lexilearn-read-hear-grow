@@ -248,20 +248,25 @@ export default function ParentAssessment({ studentId, studentName, onComplete }:
     try {
       const learningProfile = generateLearningProfile(responses);
 
-      const { error } = await supabase.from("student_assessments").upsert({
+      const { data: assessmentData, error } = await supabase.from("student_assessments").upsert({
         student_id: studentId,
         responses,
         learning_profile: learningProfile,
         completed_at: new Date().toISOString(),
-      });
+      }).select().single();
 
       if (error) throw error;
 
-      toast.success("Assessment completed! Your child's personalized study plan is ready.");
+      toast.success("Assessment completed! Now please upload evidence of your child's work.");
+      
+      // Redirect to submission upload page
+      const assignmentId = assessmentData?.id || crypto.randomUUID();
+      navigate(
+        `/parent/submission-upload?assignmentId=${encodeURIComponent(assignmentId)}&assignmentName=${encodeURIComponent("Learning Assessment")}&studentId=${encodeURIComponent(studentId)}&studentName=${encodeURIComponent(studentName || "Student")}`
+      );
+      
       if (onComplete) {
         onComplete();
-      } else {
-        navigate("/parent");
       }
     } catch (error) {
       console.error("Error saving assessment:", error);

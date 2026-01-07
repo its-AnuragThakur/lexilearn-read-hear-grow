@@ -95,13 +95,13 @@ export default function SubmissionUpload() {
     clearInterval(progressInterval);
     setProgress(100);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Upload error:", error);
+      throw new Error(error.message || "Failed to upload file");
+    }
 
-    const { data: urlData } = supabase.storage
-      .from("assignment-evidence")
-      .getPublicUrl(data.path);
-
-    return urlData.publicUrl;
+    // Return the file path - we'll generate signed URLs when viewing
+    return data.path;
   };
 
   const handleSubmit = async () => {
