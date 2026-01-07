@@ -252,6 +252,39 @@ export type Database = {
         }
         Relationships: []
       }
+      parent_created_students: {
+        Row: {
+          created_at: string | null
+          credentials_sent_at: string | null
+          id: string
+          parent_id: string
+          password_changed: boolean | null
+          student_email: string
+          student_id: string
+          temporary_password: string
+        }
+        Insert: {
+          created_at?: string | null
+          credentials_sent_at?: string | null
+          id?: string
+          parent_id: string
+          password_changed?: boolean | null
+          student_email: string
+          student_id: string
+          temporary_password: string
+        }
+        Update: {
+          created_at?: string | null
+          credentials_sent_at?: string | null
+          id?: string
+          parent_id?: string
+          password_changed?: boolean | null
+          student_email?: string
+          student_id?: string
+          temporary_password?: string
+        }
+        Relationships: []
+      }
       parent_link_requests: {
         Row: {
           created_at: string
