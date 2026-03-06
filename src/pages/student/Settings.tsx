@@ -32,6 +32,7 @@ const themes = [
 const fonts = [
   { id: 'lexend', name: 'Lexend' },
   { id: 'open-dyslexic', name: 'OpenDyslexic' },
+  { id: 'atkinson', name: 'Atkinson' },
 ];
 
 export default function StudentSettings() {
