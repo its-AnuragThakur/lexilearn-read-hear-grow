@@ -280,6 +280,10 @@
     font-family: 'Open-Dyslexic', 'OpenDyslexic', 'Lexend', system-ui, sans-serif;
   }
 
+  .font-atkinson {
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  }
+
   /* Custom colors */
   .bg-lexi-teal {
     background-color: hsl(var(--lexi-teal));

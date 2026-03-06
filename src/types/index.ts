@@ -21,7 +21,7 @@ export interface UserRole {
 export interface AccessibilityPreferences {
   id: string;
   user_id: string;
-  font_family: 'lexend' | 'open-dyslexic' | 'system';
+  font_family: 'lexend' | 'open-dyslexic' | 'atkinson' | 'system';
   font_size: number;
   line_spacing: number;
   letter_spacing: number;

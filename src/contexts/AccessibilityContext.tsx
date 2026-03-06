@@ -46,10 +46,13 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     // Font family
     if (preferences.font_family === 'open-dyslexic') {
       root.classList.add('font-open-dyslexic');
-      root.classList.remove('font-lexend');
+      root.classList.remove('font-lexend', 'font-atkinson');
+    } else if (preferences.font_family === 'atkinson') {
+      root.classList.add('font-atkinson');
+      root.classList.remove('font-lexend', 'font-open-dyslexic');
     } else {
       root.classList.add('font-lexend');
-      root.classList.remove('font-open-dyslexic');
+      root.classList.remove('font-open-dyslexic', 'font-atkinson');
     }
 
     // Font size
