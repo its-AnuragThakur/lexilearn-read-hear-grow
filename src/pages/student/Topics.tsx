@@ -15,29 +15,70 @@ import { LexiCard } from '@/components/ui/lexi-card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 
-// Sample topics - would come from database
-const getTopicsForUnit = (unitId: string) => {
-  const topicsByUnit: Record<string, Array<{ id: string; name: string; completed: boolean }>> = {
+// Topic data per subject and unit
+const topicsBySubjectUnit: Record<string, Record<string, Array<{ id: string; name: string; completed: boolean }>>> = {
+  english: {
     'unit-1': [
-      { id: 'topic-1', name: 'Introduction to Letters', completed: true },
-      { id: 'topic-2', name: 'Vowels and Consonants', completed: true },
-      { id: 'topic-3', name: 'Simple Words', completed: true },
-      { id: 'topic-4', name: 'Reading Short Sentences', completed: false },
-      { id: 'topic-5', name: 'Practice Reading', completed: false },
+      { id: 'eng-topic-1', name: 'Introduction to Letters', completed: true },
+      { id: 'eng-topic-2', name: 'Vowels and Consonants', completed: true },
+      { id: 'eng-topic-3', name: 'Simple Words', completed: true },
+      { id: 'eng-topic-4', name: 'Reading Short Sentences', completed: false },
+      { id: 'eng-topic-5', name: 'Practice Reading', completed: false },
     ],
     'unit-2': [
-      { id: 'topic-1', name: 'Common Words', completed: true },
-      { id: 'topic-2', name: 'Word Families', completed: false },
-      { id: 'topic-3', name: 'Synonyms', completed: false },
-      { id: 'topic-4', name: 'Antonyms', completed: false },
-      { id: 'topic-5', name: 'Using New Words', completed: false },
-      { id: 'topic-6', name: 'Word Games', completed: false },
-      { id: 'topic-7', name: 'Review', completed: false },
-      { id: 'topic-8', name: 'Quiz', completed: false },
+      { id: 'eng-topic-6', name: 'Common Words', completed: true },
+      { id: 'eng-topic-7', name: 'Word Families', completed: false },
+      { id: 'eng-topic-8', name: 'Synonyms', completed: false },
     ],
-  };
-  
-  return topicsByUnit[unitId] || [
+  },
+  math: {
+    'unit-1': [
+      { id: 'math-topic-1', name: 'Counting 1 to 10', completed: true },
+      { id: 'math-topic-2', name: 'Counting 11 to 20', completed: true },
+      { id: 'math-topic-3', name: 'Number Order', completed: false },
+      { id: 'math-topic-4', name: 'Number Shapes', completed: false },
+    ],
+    'unit-2': [
+      { id: 'math-topic-5', name: 'What is Addition?', completed: true },
+      { id: 'math-topic-6', name: 'Adding to 10', completed: false },
+      { id: 'math-topic-7', name: 'Adding Doubles', completed: false },
+    ],
+    'unit-3': [
+      { id: 'math-topic-8', name: 'What is Subtraction?', completed: false },
+    ],
+  },
+  science: {
+    'unit-1': [
+      { id: 'sci-topic-1', name: 'What are Living Things?', completed: true },
+      { id: 'sci-topic-2', name: 'Animals', completed: true },
+      { id: 'sci-topic-3', name: 'Plants', completed: false },
+    ],
+    'unit-2': [
+      { id: 'sci-topic-4', name: 'Seeds and Growth', completed: false },
+    ],
+  },
+  geography: {
+    'unit-1': [
+      { id: 'geo-topic-1', name: 'What is Geography?', completed: false },
+      { id: 'geo-topic-2', name: 'Maps and Directions', completed: false },
+    ],
+  },
+  art: {
+    'unit-1': [
+      { id: 'art-topic-1', name: 'Primary Colours', completed: true },
+      { id: 'art-topic-2', name: 'Shapes in Art', completed: true },
+    ],
+  },
+  music: {
+    'unit-1': [
+      { id: 'music-topic-1', name: 'What is Music?', completed: false },
+      { id: 'music-topic-2', name: 'Musical Instruments', completed: false },
+    ],
+  },
+};
+
+const getTopicsForUnit = (subjectId: string, unitId: string) => {
+  return topicsBySubjectUnit[subjectId]?.[unitId] || [
     { id: 'topic-1', name: 'Getting Started', completed: false },
     { id: 'topic-2', name: 'Key Concepts', completed: false },
     { id: 'topic-3', name: 'Examples', completed: false },
@@ -47,7 +88,7 @@ const getTopicsForUnit = (unitId: string) => {
 
 export default function TopicSelection() {
   const { subjectId, unitId } = useParams<{ subjectId: string; unitId: string }>();
-  const topics = getTopicsForUnit(unitId || '');
+  const topics = getTopicsForUnit(subjectId || '', unitId || '');
   
   // Calculate progress
   const completedCount = topics.filter(t => t.completed).length;
